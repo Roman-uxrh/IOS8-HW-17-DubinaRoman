@@ -32,6 +32,7 @@ class ViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 25)
         button.layer.cornerRadius = 25
         button.backgroundColor = .systemIndigo
+        button.addTarget(self, action: #selector(generatePassword), for: .touchUpInside)
         return button
     }()
     
@@ -42,6 +43,7 @@ class ViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 25)
         button.layer.cornerRadius = 25
         button.backgroundColor = .systemIndigo
+        button.addTarget(self, action: #selector(searchPasword), for: .touchUpInside)
         return button
     }()
     
@@ -95,63 +97,34 @@ class ViewController: UIViewController {
     
     // MARK: - Actions
     
+    @objc private func generatePassword() {
+        let array = String.printable.map { String($0) }
+//        let text = generateBruteForce("1234", fromArray: array)
+        var text: String = ""
+        for _ in 1...3 {
+            text.append(array.randomElement() ?? "")
+        }
+        textField.isSecureTextEntry = true
+        textField.text = text
+    }
+    
+    @objc private func searchPasword() {
+        if textField.text != "" {
+            bruteForce(passwordToUnlock: textField.text ?? "")
+        }
+    }
+    
     // MARK: - Funcions
     
-    func bruteForce(passwordToUnlock: String) {
-        let ALLOWED_CHARACTERS:   [String] = String().printable.map { String($0) }
+    private func bruteForce(passwordToUnlock: String) {
+        let allowedCharacters = String.printable.map { String($0) }
 
-        var password: String = ""
+        var password = ""
         while password != passwordToUnlock {
-            password = generateBruteForce(password, fromArray: ALLOWED_CHARACTERS)
+            password = generateBruteForce(password, fromArray: allowedCharacters)
             print(password)
         }
-        print(password)
+        label.text = password
+        textField.isSecureTextEntry = false
     }
 }
-
-
-
-extension String {
-    var digits:      String { return "0123456789" }
-    var lowercase:   String { return "abcdefghijklmnopqrstuvwxyz" }
-    var uppercase:   String { return "ABCDEFGHIJKLMNOPQRSTUVWXYZ" }
-    var punctuation: String { return "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~" }
-    var letters:     String { return lowercase + uppercase }
-    var printable:   String { return digits + letters + punctuation }
-
-
-
-    mutating func replace(at index: Int, with character: Character) {
-        var stringArray = Array(self)
-        stringArray[index] = character
-        self = String(stringArray)
-    }
-}
-
-func indexOf(character: Character, _ array: [String]) -> Int {
-    return array.firstIndex(of: String(character))!
-}
-
-func characterAt(index: Int, _ array: [String]) -> Character {
-    return index < array.count ? Character(array[index])
-                               : Character("")
-}
-
-func generateBruteForce(_ string: String, fromArray array: [String]) -> String {
-    var str: String = string
-
-    if str.count <= 0 {
-        str.append(characterAt(index: 0, array))
-    }
-    else {
-        str.replace(at: str.count - 1,
-                    with: characterAt(index: (indexOf(character: str.last!, array) + 1) % array.count, array))
-
-        if indexOf(character: str.last!, array) == 0 {
-            str = String(generateBruteForce(String(str.dropLast()), fromArray: array)) + String(str.last!)
-        }
-    }
-
-    return str
-}
-

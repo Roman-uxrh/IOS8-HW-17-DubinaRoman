@@ -13,6 +13,8 @@
 		264DFEE7260D07F00035EA15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264DFEE6260D07F00035EA15 /* Assets.xcassets */; };
 		264DFEEA260D07F00035EA15 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 264DFEE8260D07F00035EA15 /* LaunchScreen.storyboard */; };
 		84026639299D24C00012A26C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 84026638299D24C00012A26C /* SnapKit */; };
+		8402663B299D46EA0012A26C /* Extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8402663A299D46EA0012A26C /* Extension String.swift */; };
+		8402663D299D5CDE0012A26C /* BruteForse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8402663C299D5CDE0012A26C /* BruteForse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,8 @@
 		264DFEE6260D07F00035EA15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		264DFEE9260D07F00035EA15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		264DFEEB260D07F00035EA15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8402663A299D46EA0012A26C /* Extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension String.swift"; sourceTree = "<group>"; };
+		8402663C299D5CDE0012A26C /* BruteForse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BruteForse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +71,8 @@
 			children = (
 				84026636299D16370012A26C /* App */,
 				264DFEE1260D07EF0035EA15 /* ViewController.swift */,
+				8402663A299D46EA0012A26C /* Extension String.swift */,
+				8402663C299D5CDE0012A26C /* BruteForse.swift */,
 			);
 			path = Sourse;
 			sourceTree = "<group>";
@@ -165,8 +171,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8402663D299D5CDE0012A26C /* BruteForse.swift in Sources */,
 				264DFEE2260D07EF0035EA15 /* ViewController.swift in Sources */,
 				264DFEDE260D07EF0035EA15 /* AppDelegate.swift in Sources */,
+				8402663B299D46EA0012A26C /* Extension String.swift in Sources */,
 				264DFEE0260D07EF0035EA15 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
