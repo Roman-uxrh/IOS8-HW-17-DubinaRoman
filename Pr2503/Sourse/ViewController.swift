@@ -3,6 +3,8 @@ import SnapKit
 
 class ViewController: UIViewController {
     
+    var bruteForse = BruteForce()
+    
     // MARK: - Outlets
     
     private lazy var label: UILabel = {
@@ -47,6 +49,13 @@ class ViewController: UIViewController {
         return button
     }()
     
+    private lazy var indicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.color = .black
+        indicator.style = .large
+        return indicator
+    }()
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
@@ -54,7 +63,6 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         setupHierarchy()
         setupLayout()
-//        self.bruteForce(passwordToUnlock: "1!gr")
     }
     
     // MARK: - Setups
@@ -64,6 +72,7 @@ class ViewController: UIViewController {
         view.addSubview(textField)
         view.addSubview(buttonPasword)
         view.addSubview(buttonPaswordSearch)
+        view.addSubview(indicator)
     }
     
     private func setupLayout() {
@@ -93,13 +102,18 @@ class ViewController: UIViewController {
             make.left.equalTo(view).offset(40)
             make.right.equalTo(view).offset(-40)
         }
+        
+        indicator.snp.makeConstraints { make in
+            make.height.width.equalTo(60)
+            make.top.equalTo(textField.snp.bottom).offset(10)
+            make.centerX.equalTo(view)
+        }
     }
     
     // MARK: - Actions
     
     @objc private func generatePassword() {
         let array = String.printable.map { String($0) }
-//        let text = generateBruteForce("1234", fromArray: array)
         var text: String = ""
         for _ in 1...3 {
             text.append(array.randomElement() ?? "")
@@ -110,21 +124,10 @@ class ViewController: UIViewController {
     
     @objc private func searchPasword() {
         if textField.text != "" {
-            bruteForce(passwordToUnlock: textField.text ?? "")
+            indicator.startAnimating()
+            let text = bruteForse.bruteForce(passwordToUnlock: textField.text ?? "")
+            label.text = text
+            textField.isSecureTextEntry = false
         }
-    }
-    
-    // MARK: - Funcions
-    
-    private func bruteForce(passwordToUnlock: String) {
-        let allowedCharacters = String.printable.map { String($0) }
-
-        var password = ""
-        while password != passwordToUnlock {
-            password = generateBruteForce(password, fromArray: allowedCharacters)
-            print(password)
-        }
-        label.text = password
-        textField.isSecureTextEntry = false
     }
 }
