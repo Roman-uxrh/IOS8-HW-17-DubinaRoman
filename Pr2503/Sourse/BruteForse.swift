@@ -7,23 +7,28 @@
 
 import Foundation
 
-class BruteForce {
+final class BruteForce {
     
+    weak var delegate: BruteForcerProtocol?
     private let queue = DispatchQueue(label: "queue", qos: .userInteractive)
+    var isStarted = false
     
-    func bruteForce(passwordToUnlock: String) -> String {
+    func bruteForce(passwordToUnlock: String) {
         let allowedCharacters = String.printable.map { String($0) }
-
+        
+        isStarted = true
         var password = ""
         
         queue.async {
-            while password != passwordToUnlock {
+            while password != passwordToUnlock && self.isStarted {
                 password = self.generateBruteForce(password, fromArray: allowedCharacters)
                 print(password)
+                
+                DispatchQueue.main.async {
+                    self.delegate?.showPasswordLabel(text: password)
+                }
             }
         }
-        
-        return password
     }
     
     

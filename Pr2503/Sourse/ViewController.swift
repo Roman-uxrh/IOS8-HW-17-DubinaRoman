@@ -1,9 +1,9 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
-    var bruteForse = BruteForce()
+    private let bruteForse = BruteForce()
     
     // MARK: - Outlets
     
@@ -20,21 +20,22 @@ class ViewController: UIViewController {
         let textField = UITextField()
         textField.textColor = .black
         textField.textAlignment = .center
-        textField.placeholder = "Сгенерированный пароль"
+        textField.placeholder = "Пароль"
         textField.font = UIFont.systemFont(ofSize: 25)
         textField.backgroundColor = .cyan
         textField.layer.cornerRadius = 5
+        textField.isSecureTextEntry = true
         return textField
     }()
     
-    private lazy var buttonPasword: UIButton = {
+    private lazy var stopGenerate: UIButton = {
         let button = UIButton()
-        button.setTitle("Сгенерировать пароль", for: .normal)
+        button.setTitle("Стоп", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 25)
         button.layer.cornerRadius = 25
         button.backgroundColor = .systemIndigo
-        button.addTarget(self, action: #selector(generatePassword), for: .touchUpInside)
+        button.addTarget(self, action: #selector(stopGeneratePassword), for: .touchUpInside)
         return button
     }()
     
@@ -63,6 +64,7 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         setupHierarchy()
         setupLayout()
+        bruteForse.delegate = self
     }
     
     // MARK: - Setups
@@ -70,7 +72,7 @@ class ViewController: UIViewController {
     private func setupHierarchy() {
         view.addSubview(label)
         view.addSubview(textField)
-        view.addSubview(buttonPasword)
+        view.addSubview(stopGenerate)
         view.addSubview(buttonPaswordSearch)
         view.addSubview(indicator)
     }
@@ -89,15 +91,15 @@ class ViewController: UIViewController {
             make.right.equalTo(view).offset(-40)
         }
         
-        buttonPasword.snp.makeConstraints { make in
+        stopGenerate.snp.makeConstraints { make in
             make.top.equalTo(textField.snp.bottom).offset(80)
             make.height.equalTo(50)
-            make.left.equalTo(view).offset(40)
-            make.right.equalTo(view).offset(-40)
+            make.width.equalTo(80)
+            make.centerX.equalTo(view)
         }
         
         buttonPaswordSearch.snp.makeConstraints { make in
-            make.top.equalTo(buttonPasword.snp.bottom).offset(30)
+            make.top.equalTo(stopGenerate.snp.bottom).offset(30)
             make.height.equalTo(50)
             make.left.equalTo(view).offset(40)
             make.right.equalTo(view).offset(-40)
@@ -112,22 +114,30 @@ class ViewController: UIViewController {
     
     // MARK: - Actions
     
-    @objc private func generatePassword() {
-        let array = String.printable.map { String($0) }
-        var text: String = ""
-        for _ in 1...3 {
-            text.append(array.randomElement() ?? "")
-        }
-        textField.isSecureTextEntry = true
-        textField.text = text
+    @objc private func stopGeneratePassword() {
+        bruteForse.isStarted = false
+        label.text = "Пароль не подобран"
     }
     
     @objc private func searchPasword() {
-        if textField.text != "" {
+        if textField.text == "" {
+            label.text = "Введите пароль"
+        } else {
+            let pasword = textField.text
             indicator.startAnimating()
-            let text = bruteForse.bruteForce(passwordToUnlock: textField.text ?? "")
-            label.text = text
+            bruteForse.bruteForce(passwordToUnlock: pasword ?? "")
             textField.isSecureTextEntry = false
+            indicator.stopAnimating()
         }
+    }
+}
+
+protocol BruteForcerProtocol: AnyObject {
+    func showPasswordLabel(text: String)
+}
+
+extension ViewController: BruteForcerProtocol {
+    func showPasswordLabel(text: String) {
+        label.text = text
     }
 }
