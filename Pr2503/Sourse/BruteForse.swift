@@ -28,6 +28,17 @@ final class BruteForce {
                     self.delegate?.showPasswordLabel(text: password)
                 }
             }
+            
+            DispatchQueue.main.async {
+                let text: String
+                if !self.isStarted && password != passwordToUnlock {
+                    text = "Пароль не подобран"
+                } else {
+                    text = "Пароль подобран - \(password)"
+                }
+                self.delegate?.showPasswordLabel(text: text)
+                self.delegate?.stopAnimating()
+            }
         }
     }
     

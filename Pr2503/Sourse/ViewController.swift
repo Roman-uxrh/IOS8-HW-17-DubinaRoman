@@ -116,7 +116,6 @@ final class ViewController: UIViewController {
     
     @objc private func stopGeneratePassword() {
         bruteForse.isStarted = false
-        label.text = "Пароль не подобран"
     }
     
     @objc private func searchPasword() {
@@ -126,18 +125,23 @@ final class ViewController: UIViewController {
             let pasword = textField.text
             indicator.startAnimating()
             bruteForse.bruteForce(passwordToUnlock: pasword ?? "")
-            textField.isSecureTextEntry = false
-            indicator.stopAnimating()
+//            textField.isSecureTextEntry = false
+//            indicator.stopAnimating()
         }
     }
 }
 
 protocol BruteForcerProtocol: AnyObject {
     func showPasswordLabel(text: String)
+    func stopAnimating()
 }
 
 extension ViewController: BruteForcerProtocol {
     func showPasswordLabel(text: String) {
         label.text = text
+    }
+    
+    func stopAnimating() {
+        indicator.stopAnimating()
     }
 }
